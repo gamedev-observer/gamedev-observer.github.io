@@ -1,1 +1,74 @@
-todo: discourse
+---
+# this is needed for jekyll to start parsing
+---
+
+<style>
+	h1 {
+		text-align: center;
+	}
+
+	.container {
+		max-width: 800;
+    margin-left: auto;
+    margin-right: auto;
+	}
+
+	.discourse {
+		margin-top: 10px;
+		padding: 15px;
+		padding-left: 25px;
+		
+		background-color: lightgray;
+		list-style: none;
+		border-radius: 12px;
+	}
+
+	.context {
+		display: none;
+		padding: 5px;
+		list-style: none;
+	}
+
+	.context li {
+		margin: 7px;
+	}
+
+	.more {
+		position: relative;
+		top: 3px;
+		margin-left: 10px;
+		height: 1em;
+	}
+
+	/* show context and source on hover */
+	.discourse:hover .context {
+		display: block
+	}
+</style>
+
+<h1>
+	Discourse Dashboard
+</h1>
+
+<ul class="container">
+{% for discourse_hash in site.data reversed %}
+{% assign time = discourse_hash[0] | date: "%d. %b, %Y"  %}
+{% if time and discourse_hash[1].quip %} <!-- discourse without a date or quip will be discarded -->
+{% assign discourse = discourse_hash[1] %} <!-- the information in the file -->
+	<li class="discourse">
+		<b>{{ time }}</b> &nbsp; &nbsp; &nbsp; {{ discourse.quip }}
+		{% if discourse.context or discourse.source %}
+		<img class="more" src="/assets/more.png">
+		<ul class="context">
+			{% if discourse.context %}
+			<li>{{ discourse.context }}</li>
+			{% endif %}
+			{% if discourse.source %}
+			<li><a href="{{ discourse.source }}">{{ discourse.source }}</a></li>
+			{% endif %}
+		</ul>
+		{% endif %}
+	</li>
+{% endif %}
+{% endfor %}
+</ul>
